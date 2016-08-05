@@ -15,6 +15,7 @@ class CreatePosts extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('post_types_id');
+            $table->integer('sh_items_id');
             $table->string('brand', 100);
             $table->string('title', 64);
             $table->text('desc', 255);
