@@ -27,7 +27,7 @@ class CreateShItemsTable extends Migration
             $table->string('img', 255)->nullable();
             $table->integer('img_width')->unsigned()->default(0);
             $table->integer('img_height')->unsigned()->default(0);
-            $table->json('extra_data')->nullable()->comment('dmp details in json format');
+            $table->text('extra_data')->nullable()->comment('dmp details in json format');
             $table->text('tag')->nullable()->comment('tagging from socialhub');
             $table->string('post_language', 50)->nullable();
             $table->boolean('is_linked')->default(0);
