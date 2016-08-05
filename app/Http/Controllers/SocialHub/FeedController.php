@@ -33,7 +33,7 @@ class FeedController extends Controller
                 $socialHubItems->status = $socialHubFeed[$i]['status'];
                 $socialHubItems->created = date("Y-m-d H:i", $socialHubFeed[$i]['created']);
                 
-                if (isset($socialHubFeed[$i]['images'][0][0]['original'])) {
+                if (isset($socialHubFeed[$i]['images'][0]['original'])) {
                     $socialHubItems->img = (string)$socialHubFeed[$i]['images'][0]['original']['url'];
                     $socialHubItems->img_width = $socialHubFeed[$i]['images'][0]['original']['width'];
                     $socialHubItems->img_height = $socialHubFeed[$i]['images'][0]['original']['height'];
