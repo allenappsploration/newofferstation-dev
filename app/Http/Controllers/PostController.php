@@ -11,6 +11,7 @@ use App\Http\Requests;
 class PostController extends Controller
 {
     const DATE_FORMAT = 'Y-m-d';
+    const LIMIT_RECORD = 10;
 
     public function creation() {
         $this->convertToPosts();
@@ -20,7 +21,12 @@ class PostController extends Controller
 
     private function convertToPosts() {
         $lastRecord = Post::orderBy('created_at', 'desc')->first();
-        $nextItems = SocialhubItems::where('id', '>', $lastRecord->sh_items_id)->limit(10)->get();
+        if ($lastRecord !== null) {
+            $nextItems = SocialhubItems::where('id', '>', $lastRecord->sh_items_id)->limit(PostController::LIMIT_RECORD)->get();
+        }
+        else {
+            $nextItems = SocialhubItems::orderBy('created_at')->limit(PostController::LIMIT_RECORD)->get();
+        }
 
         for ($i = 0; $i < $nextItems->count(); $i++) {
             $curItem = $nextItems[$i];
@@ -31,6 +37,7 @@ class PostController extends Controller
             $newPost->brand = $curItem->name;
             $newPost->title = substr($curItem->raw_body, 0, 64);
             $newPost->desc = $curItem->raw_body;
+            $newPost->date_type = POST::DATE_TYPE[mt_rand(0, 3)];
             $newPost->start = date(PostController::DATE_FORMAT, strtotime('2016-08-01'));
             $newPost->end = date(PostController::DATE_FORMAT, strtotime('+4'));
             $newPost->publish_start = date(PostController::DATE_FORMAT, strtotime('2016-08-01'));
@@ -38,7 +45,7 @@ class PostController extends Controller
             $newPost->product_url = $curItem->url;
             $newPost->keywords = '';
             $newPost->approval_status = 'publish';
-            $this->d($newPost->toArray());
+            $newPost->save();
         }
     }
 
