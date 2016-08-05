@@ -48,10 +48,7 @@ class FeedController extends Controller
                 
                 $socialHubItems->tag = rtrim($tags, ", ");
                 
-                if (count($socialHubFeed[$i]['post_language']) > 0) {
-                    $language = (string)$socialHubFeed[$i]['post_language'] . ", ";
-                }
-                $socialHubItems->post_language = rtrim($language, ", ");
+                $socialHubItems->post_language = (string)$socialHubFeed[$i]['post_language'];
                 
                 if (!$socialHubItems->save()) {
                     return false;
