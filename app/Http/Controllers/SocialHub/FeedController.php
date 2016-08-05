@@ -7,7 +7,7 @@ use \App\Models\SocialhubItems;
 
 class FeedController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         $socialHubFeedLib = new SocialhubFeedLib();
         $getSocialHubFeed = $socialHubFeedLib->get();
