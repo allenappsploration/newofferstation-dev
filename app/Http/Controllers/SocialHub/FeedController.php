@@ -14,6 +14,13 @@ class FeedController extends Controller
         
         $socialHubFeedArray = json_decode($getSocialHubFeed['body'], true);
         
+        if (!is_null($socialHubFeedArray)) {
+            $this->storeItemsIntoDB($socialHubFeedArray);
+        }
+    }
+    
+    private function storeItemsIntoDB(Array $socialHubFeedArray)
+    {
         $socialHubFeed = $socialHubFeedArray['items'];
         
         if (count($socialHubFeed) > 0) {
@@ -54,6 +61,28 @@ class FeedController extends Controller
                 }
             }
         }
+                
+        if (isset($socialHubFeedArray['paging'])) {
+            $socialHubNextPage = $socialHubFeedArray['paging'];
+
+            if (count($socialHubNextPage) > 0) {
+                if (count($socialHubNextPage['next']) > 0) {
+                    // TODO: next page
+                    $nextPageURL = str_replace_first('?oauth_consumer_key', '.json?oauth_consumer_key', $socialHubNextPage['next']);
+                    $socialHubFeedLib = new SocialhubFeedLib();
+                    $getSocialHubNextFeed = $socialHubFeedLib->getNextPage($nextPageURL);
+                    $socialHubNextFeedArray = json_decode($getSocialHubNextFeed['body'], true);
+                    $this->storeItemsIntoDB($socialHubNextFeedArray);
+                }
+            }
+        }
+    }
+    
+    private function str_replace_first($from, $to, $subject)
+    {
+        $from = '/'.preg_quote($from, '/').'/';
+
+        return preg_replace($from, $to, $subject, 1);
     }
 }
 
