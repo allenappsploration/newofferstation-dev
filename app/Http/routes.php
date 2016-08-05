@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 
 Route::resource('feed', 'SocialHub\FeedController', ['only' => ['index']]);
+Route::get('post', 'PostController@creation');
