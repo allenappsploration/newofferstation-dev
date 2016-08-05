@@ -18,7 +18,6 @@ class FeedController extends Controller
         
         if (count($socialHubFeed) > 0) {
             $tags = "";
-            $language = "";
             
             for ($i = 0; $i < count($socialHubFeed); $i++) {
                 $socialHubItems = new SocialhubItems;
