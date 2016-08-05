@@ -15,5 +15,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('feed', 'SocialHub\FeedController', ['only' => ['index']]);
+Route::get('feed', ['as' => 'fetch', 'uses' => 'SocialHub\FeedController@index']);
 Route::get('post', 'PostController@creation');
