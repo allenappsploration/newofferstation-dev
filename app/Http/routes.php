@@ -16,4 +16,4 @@ Route::get('/', function () {
 });
 
 Route::get('feed', ['as' => 'fetch', 'uses' => 'SocialHub\FeedController@index']);
-Route::get('post', 'PostController@creation');
+Route::get('post', ['as' => 'fetch', 'uses' => 'PostController@creation']);
