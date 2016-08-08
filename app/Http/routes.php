@@ -15,5 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+/**
+ * Internal use routes
+ */
 Route::get('feed', ['as' => 'fetch', 'uses' => 'SocialHub\FeedController@index']);
 Route::get('post', ['as' => 'fetch', 'uses' => 'PostController@creation']);
+
+/**
+ * Api for outsiders
+ */
+Route::get('api/posts', 'Api\PostController@index');
