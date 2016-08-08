@@ -26,7 +26,7 @@ class PostController extends Controller
 //            $nextItems = SocialhubItems::where('id', '>', $lastRecord->sh_items_id)->limit(PostController::LIMIT_RECORD)->get();
 //        }
 //        else {
-            $nextItems = SocialhubItems::orderBy('created_at')->limit(PostController::LIMIT_RECORD)->get();
+            $nextItems = SocialhubItems::orderBy('created_at')->get();//->limit(PostController::LIMIT_RECORD)->get();
 //        }
 
         for ($i = 0; $i < $nextItems->count(); $i++) {
