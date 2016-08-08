@@ -24,8 +24,6 @@ class ConvertSHItemsToPosts extends Job implements ShouldQueue
      */
     public function __construct()
     {
-        $job = (new \App\Jobs\ConvertSHItemsToPosts())->delay(30);
-        $this->dispatch($job);
         //
     }
 
