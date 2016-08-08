@@ -22,12 +22,12 @@ class PostController extends Controller
 
     private function convertToPosts() {
         $lastRecord = Post::orderBy('created_at', 'desc')->first();
-        if ($lastRecord !== null) {
-            $nextItems = SocialhubItems::where('id', '>', $lastRecord->sh_items_id)->limit(PostController::LIMIT_RECORD)->get();
-        }
-        else {
+//        if ($lastRecord !== null) {
+//            $nextItems = SocialhubItems::where('id', '>', $lastRecord->sh_items_id)->limit(PostController::LIMIT_RECORD)->get();
+//        }
+//        else {
             $nextItems = SocialhubItems::orderBy('created_at')->limit(PostController::LIMIT_RECORD)->get();
-        }
+//        }
 
         for ($i = 0; $i < $nextItems->count(); $i++) {
             $curItem = $nextItems[$i];
