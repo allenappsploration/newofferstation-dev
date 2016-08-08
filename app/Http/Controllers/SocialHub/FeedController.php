@@ -11,21 +11,24 @@ class FeedController extends Controller
     {
         $socialHubFeedLib = new SocialhubFeedLib();
         $getSocialHubFeed = $socialHubFeedLib->get();
-        
+
         $socialHubFeedArray = json_decode($getSocialHubFeed['body'], true);
-        
+
         if (!is_null($socialHubFeedArray)) {
             $this->storeItemsIntoDB($socialHubFeedArray);
         }
+
+        $job = (new \App\Jobs\ConvertSHItemsToPosts())->delay(30);
+        $this->dispatch($job);
     }
-    
+
     private function storeItemsIntoDB(Array $socialHubFeedArray)
     {
         $socialHubFeed = $socialHubFeedArray['items'];
-        
+
         if (count($socialHubFeed) > 0) {
             $tags = "";
-            
+
             for ($i = 0; $i < count($socialHubFeed); $i++) {
                 $socialHubItems = new SocialhubItems;
                 $socialHubItems->nid = $socialHubFeed[$i]['nid'];
@@ -38,30 +41,30 @@ class FeedController extends Controller
                 $socialHubItems->url = $socialHubFeed[$i]['url'];
                 $socialHubItems->status = $socialHubFeed[$i]['status'];
                 $socialHubItems->created = date("Y-m-d H:i", $socialHubFeed[$i]['created']);
-                
+
                 if (isset($socialHubFeed[$i]['images'][0]['original'])) {
                     $socialHubItems->img = (string)$socialHubFeed[$i]['images'][0]['original']['url'];
                     $socialHubItems->img_width = $socialHubFeed[$i]['images'][0]['original']['width'];
                     $socialHubItems->img_height = $socialHubFeed[$i]['images'][0]['original']['height'];
                 }
                 $socialHubItems->extra_data = json_encode($socialHubFeed[$i]['data']);
-                
+
                 if (count($socialHubFeed[$i]['tags']) > 0) {
                     for ($j = 0; $j < count($socialHubFeed[$i]['tags']); $j++) {
                         $tags .= (string)$socialHubFeed[$i]['tags'][$j]['name'] . ", ";
                     }
                 }
-                
+
                 $socialHubItems->tag = rtrim($tags, ", ");
-                
+
                 $socialHubItems->post_language = (string)$socialHubFeed[$i]['post_language'];
-                
+
                 if (!$socialHubItems->save()) {
                     return false;
                 }
             }
         }
-                
+
 //        if (isset($socialHubFeedArray['paging'])) {
 //            $socialHubNextPage = $socialHubFeedArray['paging'];
 //
@@ -77,7 +80,7 @@ class FeedController extends Controller
 //            }
 //        }
     }
-    
+
     private function str_replace_first($from, $to, $subject)
     {
         $from = '/'.preg_quote($from, '/').'/';
