@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\SocialhubItems;
 use App\Http\Requests;
+use App\Models\PostImg;
 
 class PostController extends Controller
 {
@@ -46,6 +47,12 @@ class PostController extends Controller
             $newPost->keywords = '';
             $newPost->approval_status = 'publish';
             $newPost->save();
+            
+            $newImg = new PostImg();
+            $newImg->posts_id = $newPost->id;
+            $newImg->ratio = $curItem->img_height / $curItem->img_width;
+            $newImg->path = $curItem->img;
+            $newImg->save();
         }
     }
 
