@@ -18,7 +18,7 @@ class SocialhubRequest {
     protected function getJsonRequest() {
         return $this->curl->newJsonRequest(
             self::$METHOD_GET,
-            self::$DOMAIN.$this->apiName.'&limit=50&since=1470614400$offset=100' //.(time()-3600)
+            self::$DOMAIN.$this->apiName.'&limit=50&since=1470614400$offset=150' //.(time()-3600)
         )->setHeader('Accept', 'application/json')
         ->setHeader('Content-Type', 'application/json');
     }
