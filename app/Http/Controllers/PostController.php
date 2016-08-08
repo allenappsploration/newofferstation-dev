@@ -48,7 +48,7 @@ class PostController extends Controller
             $newPost->approval_status = 'publish';
             $newPost->save();
             
-            if (!isNull($curItem->img)) {
+            if (isset($curItem->img)) {
                 $newImg = new PostImg();
                 $newImg->posts_id = $newPost->id;
                 $newImg->ratio = $curItem->img_height / $curItem->img_width;
