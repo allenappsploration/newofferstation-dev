@@ -57,7 +57,7 @@ class ConvertSHItemsToPosts extends Job implements ShouldQueue
             $newPost->title = substr($curItem->raw_body, 0, 64);
 
             $newPost->desc = $curItem->raw_body;
-            $newPost->date_type = Post::DATE_TYPE[mt_rand(0, 3)];
+            $newPost->date_type = Post::$DATE_TYPE[mt_rand(0, 3)];
             $newPost->start = date(ConvertSHItemsToPosts::DATE_FORMAT, strtotime('2016-08-01'));
             $newPost->end = date(ConvertSHItemsToPosts::DATE_FORMAT, strtotime('+4'));
             $newPost->publish_start = date(ConvertSHItemsToPosts::DATE_FORMAT, strtotime('2016-08-01'));

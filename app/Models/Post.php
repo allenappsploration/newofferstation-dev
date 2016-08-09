@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    const DATE_TYPE = ['s_n', 'wsl', 'end', 'none'];
+    static $DATE_TYPE = ['s_n', 'wsl', 'end', 'none'];
     
     protected $casts = [
         'start' => 'timestamp',
