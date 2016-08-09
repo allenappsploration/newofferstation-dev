@@ -35,6 +35,12 @@ class CheckSHItemsNextPage extends Job implements ShouldQueue
     
     private function checkSHItemsNextPage()
     {
+        $socialhubPagination = SocialhubItemsPg::where('is_processed', 0)->get();
+
+        if (empty($socialhubPagination)) {
+            return "No next page found.";
+        }
+        
         $socialHubFeedLib = new SocialhubFeedLib();
 
         $URL = $socialhubPagination[0]->next_url;
