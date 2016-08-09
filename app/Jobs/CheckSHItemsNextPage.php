@@ -9,10 +9,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Libraries\SocialHub\SocialhubFeedLib;
 use App\Models\SocialhubItemsPg;
 use App\Models\SocialhubItems;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 
 class CheckSHItemsNextPage extends Job implements ShouldQueue
 {
-    use InteractsWithQueue, SerializesModels;
+    use InteractsWithQueue, SerializesModels, DispatchesJobs;
 
     /**
      * Create a new job instance.
@@ -94,7 +95,7 @@ class CheckSHItemsNextPage extends Job implements ShouldQueue
                 }
             }
         }
-
+        
         $socialhubPgCollection->update(['is_processed' => 1]);
 
         if (isset($socialHubFeedArray['paging'])) {
@@ -105,10 +106,10 @@ class CheckSHItemsNextPage extends Job implements ShouldQueue
                 $socialhubPagination = new SocialhubItemsPg();
                 $socialhubPagination->next_url = $socialHubNextPage['next'];
                 $socialhubPagination->save();
+                
+                $this->triggerToCheckSHItemsNextPage();
             }
         }
-
-        $this->triggerToCheckSHItemsNextPage();
     }
 
     private function triggerToCheckSHItemsNextPage()
@@ -118,7 +119,7 @@ class CheckSHItemsNextPage extends Job implements ShouldQueue
         if (!count($socialhubPagination)) {
             return "No next page found.";
         } else {
-            $this->handle();
+            $this->dispatch(new \App\Jobs\CheckSHItemsNextPage());
         }
     }
 }
