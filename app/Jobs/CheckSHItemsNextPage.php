@@ -8,6 +8,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Libraries\SocialHub\SocialhubFeedLib;
 use App\Models\SocialhubItemsPg;
+use App\Models\SocialhubItems;
 
 class CheckSHItemsNextPage extends Job implements ShouldQueue
 {
@@ -42,10 +43,9 @@ class CheckSHItemsNextPage extends Job implements ShouldQueue
             return "No next page found.";
         }
         
+        $URL = $socialhubPgCollection->first()->next_url;
+
         $socialHubFeedLib = new SocialhubFeedLib();
-
-        $URL = serialize($socialhubPgCollection->pluck('next_url'));
-
         $getSocialHubFeed = $socialHubFeedLib->getNextPage($URL);
 
         if (is_null($getSocialHubFeed)) {
@@ -95,7 +95,7 @@ class CheckSHItemsNextPage extends Job implements ShouldQueue
             }
         }
 
-        $socialhubPaginationCollection->update(['is_processed' => 1]);
+        $socialhubPgCollection->update(['is_processed' => 1]);
 
         if (isset($socialHubFeedArray['paging'])) {
 
@@ -118,8 +118,7 @@ class CheckSHItemsNextPage extends Job implements ShouldQueue
         if (!count($socialhubPagination)) {
             return "No next page found.";
         } else {
-            $nextPageJob = (new \App\Jobs\CheckSHItemsNextPage());
-            $this->dispatch($nextPageJob);
+            $this->handle();
         }
     }
 }
