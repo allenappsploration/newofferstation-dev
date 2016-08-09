@@ -37,7 +37,7 @@ class CheckSHItemsNextPage extends Job implements ShouldQueue
     {
         $socialhubPagination = SocialhubItemsPg::where('is_processed', 0)->get();
 
-        if (empty($socialhubPagination)) {
+        if (is_null($socialhubPagination)) {
             return "No next page found.";
         }
         
@@ -114,7 +114,7 @@ class CheckSHItemsNextPage extends Job implements ShouldQueue
     {
         $socialhubPagination = SocialhubItemsPg::where('is_processed', 0)->get();
 
-        if (empty($socialhubPagination)) {
+        if (is_null($socialhubPagination)) {
             return "No next page found.";
         } else {
             $nextPageJob = (new \App\Jobs\CheckSHItemsNextPage());
