@@ -67,11 +67,13 @@ class ConvertSHItemsToPosts extends Job implements ShouldQueue
             $newPost->approval_status = 'publish';
             $newPost->save();
 
-            $newImg = new PostImg();
-            $newImg->posts_id = $newPost->id;
-            $newImg->ratio = $curItem->img_height / $curItem->img_width;
-            $newImg->path = $curItem->img;
-            $newImg->save();
+            if (isset($curItem->img)) {
+                $newImg = new PostImg();
+                $newImg->posts_id = $newPost->id;
+                $newImg->ratio = $curItem->img_height / $curItem->img_width;
+                $newImg->path = $curItem->img;
+                $newImg->save();
+            }
         }
     }
 }
