@@ -16,7 +16,7 @@ class CreatePostImgsTable extends Migration
             $table->increments('id')->unsigned();
             $table->integer('posts_id')->unsigned();
             $table->float('ratio');
-            $table->String('path');
+            $table->String('path', 255);
             $table->timestamps();
             
             $table->foreign('posts_id')->references('id')->on('posts');
