@@ -18,15 +18,15 @@ class SocialhubRequest {
     protected function getJsonRequest() {
         return $this->curl->newJsonRequest(
             self::$METHOD_GET,
-            self::$DOMAIN.$this->apiName.'&limit=50&since=1470614400$offset=150' //.(time()-3600)
+            self::$DOMAIN.$this->apiName.'&limit=50&since='.(time()-3600)
         )->setHeader('Accept', 'application/json')
         ->setHeader('Content-Type', 'application/json');
     }
     
-    protected function getNextJsonRequest(String $URL) {
+    private function getNextJsonRequest(String $URL) {
         return $this->curl->newJsonRequest(
             self::$METHOD_GET,
-            self::$URL //.'&since='.(time()-3600)
+            $URL
         )->setHeader('Accept', 'application/json')
         ->setHeader('Content-Type', 'application/json');
     }
@@ -67,7 +67,7 @@ class SocialhubRequest {
     
     public function getNextPage(String $URL) {
         
-        $request = $this->getJsonRequest($URL);
+        $request = $this->getNextJsonRequest($URL);
         
         return $this->send($request);
     }
