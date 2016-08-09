@@ -19,7 +19,6 @@ Route::get('/', function () {
  * Internal use routes
  */
 Route::get('feed', ['as' => 'fetch', 'uses' => 'SocialHub\FeedController@index']);
-Route::get('post', ['as' => 'fetch', 'uses' => 'PostController@creation']);
 
 /**
  * Api for outsiders
