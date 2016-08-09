@@ -35,15 +35,16 @@ class CheckSHItemsNextPage extends Job implements ShouldQueue
     
     private function checkSHItemsNextPage()
     {
-        $socialhubPagination = SocialhubItemsPg::where('is_processed', 0)->get();
+        $socialhubPgCollection = SocialhubItemsPg::where('is_processed', 0);
+        $socialhubPagination = $socialhubPgCollection->get();
 
-        if (is_null($socialhubPagination)) {
+        if (!count($socialhubPagination)) {
             return "No next page found.";
         }
         
         $socialHubFeedLib = new SocialhubFeedLib();
 
-        $URL = $socialhubPagination[0]->next_url;
+        $URL = serialize($socialhubPgCollection->pluck('next_url'));
 
         $getSocialHubFeed = $socialHubFeedLib->getNextPage($URL);
 
@@ -71,14 +72,14 @@ class CheckSHItemsNextPage extends Job implements ShouldQueue
                 $socialHubItems->status = $socialHubFeed[$i]['status'];
                 $socialHubItems->created = date("Y-m-d H:i", $socialHubFeed[$i]['created']);
 
-                if (!is_null($socialHubFeed[$i]['images'][0]['original'])) {
+                if (isset($socialHubFeed[$i]['images'][0]['original'])) {
                     $socialHubItems->img = (string)$socialHubFeed[$i]['images'][0]['original']['url'];
                     $socialHubItems->img_width = $socialHubFeed[$i]['images'][0]['original']['width'];
                     $socialHubItems->img_height = $socialHubFeed[$i]['images'][0]['original']['height'];
                 }
                 $socialHubItems->extra_data = json_encode($socialHubFeed[$i]['data']);
 
-                if (!is_null($socialHubFeed[$i]['tags'])) {
+                if (isset($socialHubFeed[$i]['tags'])) {
                     for ($j = 0; $j < count($socialHubFeed[$i]['tags']); $j++) {
                         $tags .= (string)$socialHubFeed[$i]['tags'][$j]['name'] . ", ";
                     }
@@ -114,7 +115,7 @@ class CheckSHItemsNextPage extends Job implements ShouldQueue
     {
         $socialhubPagination = SocialhubItemsPg::where('is_processed', 0)->get();
 
-        if (is_null($socialhubPagination)) {
+        if (!count($socialhubPagination)) {
             return "No next page found.";
         } else {
             $nextPageJob = (new \App\Jobs\CheckSHItemsNextPage());

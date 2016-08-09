@@ -14,7 +14,7 @@ class FeedController extends Controller
 
         $socialhubPagination = SocialhubItemsPg::where('is_processed', 0)->get();
 
-        if (!empty($socialhubPagination)) {
+        if (count($socialhubPagination)) {
             $nextPageJob = (new \App\Jobs\CheckSHItemsNextPage());
             $this->dispatch($nextPageJob);
         }
@@ -52,14 +52,14 @@ class FeedController extends Controller
                 $socialHubItems->status = $socialHubFeed[$i]['status'];
                 $socialHubItems->created = date("Y-m-d H:i", $socialHubFeed[$i]['created']);
 
-                if (!is_null($socialHubFeed[$i]['images'][0]['original'])) {
+                if (isset($socialHubFeed[$i]['images'][0]['original'])) {
                     $socialHubItems->img = (string)$socialHubFeed[$i]['images'][0]['original']['url'];
                     $socialHubItems->img_width = $socialHubFeed[$i]['images'][0]['original']['width'];
                     $socialHubItems->img_height = $socialHubFeed[$i]['images'][0]['original']['height'];
                 }
                 $socialHubItems->extra_data = json_encode($socialHubFeed[$i]['data']);
 
-                if (!is_null($socialHubFeed[$i]['tags'])) {
+                if (isset($socialHubFeed[$i]['tags'])) {
                     for ($j = 0; $j < count($socialHubFeed[$i]['tags']); $j++) {
                         $tags .= (string)$socialHubFeed[$i]['tags'][$j]['name'] . ", ";
                     }
