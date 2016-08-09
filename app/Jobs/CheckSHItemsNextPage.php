@@ -6,6 +6,8 @@ use App\Jobs\Job;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Libraries\SocialHub\SocialhubFeedLib;
+use App\Models\SocialhubItemsPg;
 
 class CheckSHItemsNextPage extends Job implements ShouldQueue
 {
