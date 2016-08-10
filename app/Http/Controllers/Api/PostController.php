@@ -13,7 +13,7 @@ class PostController extends Controller
 {
     public function index() {
         
-        $result = Post::with('postImg')->paginate(50);
+        $result = Post::with('postImg')->orderBy('created_at', 'desc')->paginate(50);
         
         return $result;
     }
