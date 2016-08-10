@@ -15,7 +15,6 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         // Commands\Inspire::class,
         \App\Console\Commands\Fetch::class,
-        \App\Console\Commands\Post::class,
     ];
 
     /**
@@ -30,6 +29,5 @@ class Kernel extends ConsoleKernel
         //          ->hourly();
         
         $schedule->command('fetch')->hourly();
-        $schedule->command('post')->hourly();
     }
 }
