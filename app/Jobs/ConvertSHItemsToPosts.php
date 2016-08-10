@@ -70,7 +70,11 @@ class ConvertSHItemsToPosts extends Job implements ShouldQueue
             if (!is_null($curItem->img)) {
                 $newImg = new PostImg();
                 $newImg->posts_id = $newPost->id;
-                $newImg->ratio = $curItem->img_height / $curItem->img_width;
+                if ($curItem->img_width === 0) {
+                    $newImg->ratio = 0;
+                } else {
+                    $newImg->ratio = $curItem->img_height / $curItem->img_width;
+                }
                 $newImg->path = $curItem->img;
                 $newImg->save();
             }
