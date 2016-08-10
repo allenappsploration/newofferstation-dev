@@ -106,20 +106,7 @@ class CheckSHItemsNextPage extends Job implements ShouldQueue
                 $socialhubPagination = new SocialhubItemsPg();
                 $socialhubPagination->next_url = $socialHubNextPage['next'];
                 $socialhubPagination->save();
-                
-                $this->triggerToCheckSHItemsNextPage();
             }
-        }
-    }
-
-    private function triggerToCheckSHItemsNextPage()
-    {
-        $socialhubPagination = SocialhubItemsPg::where('is_processed', 0)->get();
-
-        if (!count($socialhubPagination)) {
-            return "No next page found.";
-        } else {
-            $this->dispatch(new \App\Jobs\CheckSHItemsNextPage());
         }
     }
 }

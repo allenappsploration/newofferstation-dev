@@ -12,15 +12,13 @@ class FeedController extends Controller
     {
         $this->storeItemsIntoDB();
 
-        $socialhubPagination = SocialhubItemsPg::where('is_processed', 0)->get();
-
-        if (count($socialhubPagination)) {
+        while (count(SocialhubItemsPg::where('is_processed', 0)->get())) {
             $nextPageJob = (new \App\Jobs\CheckSHItemsNextPage());
             $this->dispatch($nextPageJob);
+            
+            $job = (new \App\Jobs\ConvertSHItemsToPosts())->delay(10);
+            $this->dispatch($job);
         }
-
-        $job = (new \App\Jobs\ConvertSHItemsToPosts())->delay(30);
-        $this->dispatch($job);
     }
 
     private function storeItemsIntoDB()
