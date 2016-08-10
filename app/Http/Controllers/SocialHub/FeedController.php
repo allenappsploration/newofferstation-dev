@@ -12,6 +12,9 @@ class FeedController extends Controller
     {
         $this->storeItemsIntoDB();
 
+        $job = (new \App\Jobs\ConvertSHItemsToPosts())->delay(10);
+            $this->dispatch($job);
+
         while (count(SocialhubItemsPg::where('is_processed', 0)->get())) {
             $nextPageJob = (new \App\Jobs\CheckSHItemsNextPage());
             $this->dispatch($nextPageJob);
