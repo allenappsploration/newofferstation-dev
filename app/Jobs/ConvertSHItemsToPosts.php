@@ -60,11 +60,12 @@ class ConvertSHItemsToPosts extends Job implements ShouldQueue
             $newPost->date_type = Post::$DATE_TYPE[mt_rand(0, 3)];
             $newPost->start = $curItem->created;// date(ConvertSHItemsToPosts::DATE_FORMAT, strtotime('2016-08-01'));
             $newPost->end = date(ConvertSHItemsToPosts::DATE_FORMAT, strtotime('+4 day', strtotime($curItem->created)));
-            $newPost->publish_start = date(ConvertSHItemsToPosts::DATE_FORMAT, strtotime('2016-08-01'));
-            $newPost->publish_end = date(ConvertSHItemsToPosts::DATE_FORMAT, strtotime('+5'));
+            $newPost->publish_start = $curItem->created;//date(ConvertSHItemsToPosts::DATE_FORMAT, strtotime('2016-08-01'));
+            $newPost->publish_end = date(ConvertSHItemsToPosts::DATE_FORMAT, strtotime('+4 day', strtotime($curItem->created)));
             $newPost->product_url = $curItem->url;
             $newPost->keywords = '';
             $newPost->approval_status = 'publish';
+            $newPost->cat_id = mt_rand(1, 13);
             $newPost->save();
 
             if (!is_null($curItem->img)) {
