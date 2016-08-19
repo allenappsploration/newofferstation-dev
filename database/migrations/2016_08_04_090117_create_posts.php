@@ -27,6 +27,7 @@ class CreatePosts extends Migration
             $table->string('product_url', 255);
             $table->text('keywords');
             $table->enum('approval_status', ['pending', 'publish', 'unpublish']);
+            $table->integer('cat_id');
             $table->timestamps();
         });
     }
