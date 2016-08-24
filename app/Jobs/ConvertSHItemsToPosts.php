@@ -54,7 +54,7 @@ class ConvertSHItemsToPosts extends Job implements ShouldQueue
             $newPost->post_types_id = mt_rand(1, 5);
             $newPost->sh_items_id = $curItem->id;
             $newPost->brand = $curItem->name;
-            $newPost->title = substr($curItem->raw_body, 0, 64);
+            $newPost->title = mb_substr($curItem->raw_body, 0, 64);
 
             $newPost->desc = $curItem->raw_body;
             $newPost->date_type = Post::$DATE_TYPE[mt_rand(0, 3)];
